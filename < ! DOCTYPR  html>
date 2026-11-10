@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Belanjaan Saya</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 450px;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.8rem;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 12px 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #667eea;
+    }
+
+    button.btn-add {
+      background-color: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+
+    button.btn-add:hover {
+      background-color: #5a67d8;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li {
+      background-color: #f7fafc;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #edf2f7;
+      transition: all 0.2s;
+    }
+
+    li.completed span {
+      text-decoration: line-through;
+      color: #a0aec0;
+    }
+
+    .item-text {
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .delete-btn {
+      background-color: #e53e3e;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .delete-btn:hover {
+      background-color: #c53030;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: #a0aec0;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🛒 Daftar Belanjaan</h1>
+    
+    <div class="input-group">
+      <input type="text" id="itemInput" placeholder="Tambah barang belanjaan..." />
+      <button class="btn-add" onclick="addItem()">Tambah</button>
+    </div>
+
+    <ul id="shoppingList"></ul>
+    <p id="emptyMsg" class="empty-msg">Belum ada item di daftar belanjaan.</p>
+  </div>
+
+  <script>
+    const itemInput = document.getElementById('itemInput');
+    const shoppingList = document.getElementById('shoppingList');
+    const emptyMsg = document.getElementById('emptyMsg');
+
+    // Menambah item dengan menekan tombol Enter
+    itemInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        addItem();
+      }
+    });
+
+    function addItem() {
+      const text = itemInput.value.trim();
+      if (text === '') return;
+
+      const li = document.createElement('li');
+
+      const span = document.createElement('span');
+      span.className = 'item-text';
+      span.textContent = text;
+      span.onclick = function () {
+        li.classList.toggle('completed');
+      };
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.textContent = 'Hapus';
+      deleteBtn.onclick = function () {
+        li.remove();
+        checkEmpty();
+      };
+
+      li.appendChild(span);
+      li.appendChild(deleteBtn);
+      shoppingList.appendChild(li);
+
+      itemInput.value = '';
+      checkEmpty();
+    }
+
+    function checkEmpty() {
+      if (shoppingList.children.length === 0) {
+        emptyMsg.style.display = 'block';
+      } else {
+        emptyMsg.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
