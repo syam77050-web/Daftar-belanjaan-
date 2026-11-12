@@ -1,120 +1,29 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daftar Belanjaan Saya</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      display: flex;
-      justify-content: center;
-      padding-top: 50px;
-    }
-    .container {
-      background: white;
-      padding: 20px 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
-    }
-    h2 {
-      margin-top: 0;
-      color: #333;
-      text-align: center;
-    }
-    .input-group {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      outline: none;
-    }
-    button {
-      padding: 10px 15px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-    }
-    li.completed span {
-      text-decoration: line-through;
-      color: #888;
-    }
-    .delete-btn {
-      background-color: #dc3545;
-      padding: 5px 10px;
-      font-size: 12px;
-    }
-    .delete-btn:hover {
-      background-color: #c82333;
-    }
-  </style>
-</head>
-<body>
+def hitung_kembalian(total_belanja, uang_bayar):
+    if uang_bayar < total_belanja:
+        kurang = total_belanja - uang_bayar
+        return f"Uang tidak cukup! Kurang Rp {kurang:,}"
+    
+    kembalian = uang_bayar - total_belanja
+    print(f"Total Kembalian: Rp {kembalian:,}\n")
+    
+    if kembalian == 0:
+        return "Uang pas, tidak ada kembalian."
 
-  <div class="container">
-    <h2>Daftar Belanjaan</h2>
-    <div class="input-group">
-      <input type="text" id="itemInput" placeholder="Tambah barang belanjaan...">
-      <button onclick="addItem()">Tambah</button>
-    </div>
-    <ul id="shoppingList"></ul>
-  </div>
+    # Daftar pecahan uang Rupiah dari terbesar ke terkecil
+    pecahan = [100000, 50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100]
+    
+    print("Rincian Pecahan:")
+    for nominal in pecahan:
+        jumlah_lembar = kembalian // nominal
+        if jumlah_lembar > 0:
+            jenis = "lembar" if nominal >= 1000 else "koin"
+            print(f"- Rp {nominal:,} : {jumlah_lembar} {jenis}")
+            kembalian %= nominal
 
-  <script>
-    function addItem() {
-      const input = document.getElementById('itemInput');
-      const itemText = input.value.trim();
+# --- Contoh Penggunaan ---
+total = int(input("Masukkan Total Belanja (Rp): "))
+bayar = int(input("Masukkan Uang Bayar (Rp): "))
 
-      if (itemText === '') return;
-
-      const ul = document.getElementById('shoppingList');
-      const li = document.createElement('li');
-
-      const span = document.createElement('span');
-      span.textContent = itemText;
-      span.onclick = function() {
-        li.classList.toggle('completed');
-      };
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = 'Hapus';
-      deleteBtn.className = 'delete-btn';
-      deleteBtn.onclick = function() {
-        ul.removeChild(li);
-      };
-
-      li.appendChild(span);
-      li.appendChild(deleteBtn);
-      ul.appendChild(li);
-
-      input.value = '';
-    }
-  </script>
-
-</body>
-</html>
+hasil = hitung_kembalian(total, bayar)
+if hasil:
+    print(hasil)
